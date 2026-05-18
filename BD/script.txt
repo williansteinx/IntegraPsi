@@ -1,8 +1,8 @@
 
-CREATE SEQUENCE public.tb_usuario_id_usuario_seq;
+CREATE SEQUENCE integrapsi.tb_usuario_id_usuario_seq;
 
-CREATE TABLE public.tb_usuario (
-                id_usuario INTEGER NOT NULL DEFAULT nextval('public.tb_usuario_id_usuario_seq'),
+CREATE TABLE integrapsi.tb_usuario (
+                id_usuario INTEGER NOT NULL DEFAULT nextval('integrapsi.tb_usuario_id_usuario_seq'),
                 ds_email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 role VARCHAR(20) NOT NULL,
@@ -12,9 +12,9 @@ CREATE TABLE public.tb_usuario (
 );
 
 
-ALTER SEQUENCE public.tb_usuario_id_usuario_seq OWNED BY public.tb_usuario.id_usuario;
+ALTER SEQUENCE integrapsi.tb_usuario_id_usuario_seq OWNED BY integrapsi.tb_usuario.id_usuario;
 
-CREATE TABLE public.tb_psicologo (
+CREATE TABLE integrapsi.tb_psicologo (
                 id_psicologo INTEGER NOT NULL,
                 nm_psicologo VARCHAR(255) NOT NULL,
                 crp_profissional VARCHAR(50) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE public.tb_psicologo (
 );
 
 
-CREATE TABLE public.tb_ativacao_paciente (
+CREATE TABLE integrapsi.tb_ativacao_paciente (
                 id_ativacao INTEGER NOT NULL,
                 id_psicologo INTEGER NOT NULL,
                 cd_token VARCHAR(10) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE public.tb_ativacao_paciente (
 );
 
 
-CREATE TABLE public.tb_paciente (
+CREATE TABLE integrapsi.tb_paciente (
                 id_paciente INTEGER NOT NULL,
                 id_psicologo INTEGER NOT NULL,
                 nm_paciente VARCHAR NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE public.tb_paciente (
 );
 
 
-CREATE TABLE public.tb_evolucoes (
+CREATE TABLE integrapsi.tb_evolucoes (
                 id_evolucao INTEGER NOT NULL,
                 id_psicologo INTEGER NOT NULL,
                 id_paciente INTEGER NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE public.tb_evolucoes (
 );
 
 
-CREATE TABLE public.tb_agendamento (
+CREATE TABLE integrapsi.tb_agendamento (
                 id_consulta INTEGER NOT NULL,
                 id_psicologo INTEGER NOT NULL,
                 id_paciente INTEGER NOT NULL,
@@ -71,68 +71,65 @@ CREATE TABLE public.tb_agendamento (
 );
 
 
-ALTER TABLE public.tb_psicologo ADD CONSTRAINT tb_usuario_tb_psicologo_fk
+ALTER TABLE integrapsi.tb_psicologo ADD CONSTRAINT tb_usuario_tb_psicologo_fk
 FOREIGN KEY (id_psicologo)
-REFERENCES public.tb_usuario (id_usuario)
+REFERENCES integrapsi.tb_usuario (id_usuario)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.tb_paciente ADD CONSTRAINT tb_usuario_tb_paciente_fk
+ALTER TABLE integrapsi.tb_paciente ADD CONSTRAINT tb_usuario_tb_paciente_fk
 FOREIGN KEY (id_paciente)
-REFERENCES public.tb_usuario (id_usuario)
+REFERENCES integrapsi.tb_usuario (id_usuario)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-/*
-Warning: Relationship has no columns to map:
-*/
-ALTER TABLE public.tb_ativacao_paciente ADD CONSTRAINT tb_psicologo_ativacao_paciente_fk
+ALTER TABLE integrapsi.tb_ativacao_paciente ADD CONSTRAINT tb_psicologo_ativacao_paciente_fk
 FOREIGN KEY (id_psicologo)
-REFERENCES public.tb_psicologo (id_psicologo)
+REFERENCES integrapsi.tb_psicologo (id_psicologo)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.tb_agendamento ADD CONSTRAINT tb_psicologo_tb_agendamento_fk
+ALTER TABLE integrapsi.tb_agendamento ADD CONSTRAINT tb_psicologo_tb_agendamento_fk
 FOREIGN KEY (id_psicologo)
-REFERENCES public.tb_psicologo (id_psicologo)
+REFERENCES integrapsi.tb_psicologo (id_psicologo)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.tb_evolucoes ADD CONSTRAINT tb_psicologo_tb_evolucoes_fk
+ALTER TABLE integrapsi.tb_evolucoes ADD CONSTRAINT tb_psicologo_tb_evolucoes_fk
 FOREIGN KEY (id_psicologo)
-REFERENCES public.tb_psicologo (id_psicologo)
+REFERENCES integrapsi.tb_psicologo (id_psicologo)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.tb_paciente ADD CONSTRAINT tb_psicologo_tb_paciente_fk
+ALTER TABLE integrapsi.tb_paciente ADD CONSTRAINT tb_psicologo_tb_paciente_fk
 FOREIGN KEY (id_psicologo)
-REFERENCES public.tb_psicologo (id_psicologo)
+REFERENCES integrapsi.tb_psicologo (id_psicologo)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.tb_ativacao_paciente ADD CONSTRAINT tb_psicologo_tb_ativacao_paciente_fk
+ALTER TABLE integrapsi.tb_ativacao_paciente ADD CONSTRAINT tb_psicologo_tb_ativacao_paciente_fk
 FOREIGN KEY (id_psicologo)
-REFERENCES public.tb_psicologo (id_psicologo)
+REFERENCES integrapsi.tb_psicologo (id_psicologo)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.tb_agendamento ADD CONSTRAINT tb_paciente_tb_agendamento_fk
+ALTER TABLE integrapsi.tb_agendamento ADD CONSTRAINT tb_paciente_tb_agendamento_fk
 FOREIGN KEY (id_paciente)
-REFERENCES public.tb_paciente (id_paciente)
+REFERENCES integrapsi.tb_paciente (id_paciente)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.tb_evolucoes ADD CONSTRAINT tb_paciente_tb_evolucoes_fk
+ALTER TABLE integrapsi.tb_evolucoes ADD CONSTRAINT tb_paciente_tb_evolucoes_fk
 FOREIGN KEY (id_paciente)
-REFERENCES public.tb_paciente (id_paciente)
+REFERENCES integrapsi.tb_paciente (id_paciente)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
