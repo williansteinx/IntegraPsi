@@ -160,6 +160,48 @@ class AgendaScreen extends StatelessWidget {
     );
   }
 
+  // O Card da consulta com a borda colorida na esquerda
+  Widget _buildAppointmentCard(
+    String name,
+    String status,
+    Color statusColor,
+    Color borderColor,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border(left: BorderSide(color: borderColor, width: 4)),
+      ),
+      child: ListTile(
+        title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: const Row(
+          children: [
+            Icon(Icons.circle, size: 8, color: AppColors.textSecondary),
+            SizedBox(width: 4),
+            Text("1h"),
+          ],
+        ),
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: statusColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            status,
+            style: TextStyle(
+              color: statusColor,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildArrowButton(IconData icon) {
     return Container(
       padding: const EdgeInsets.all(4),
