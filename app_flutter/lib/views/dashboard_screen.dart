@@ -16,22 +16,23 @@ class DashboardScreen extends GetView<DashboardController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Cabeçalho: Saudação e Botões de Perfil/Config
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Olá!',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                      Obx(
+                        () => Text(
+                          'Olá, ${controller.nomePsicologo.value.isNotEmpty ? controller.nomePsicologo.value.split(' ').first : ''}!',
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Aqui está a sua agenda para hoje',
                         style: TextStyle(
                           fontSize: 16,
@@ -44,26 +45,26 @@ class DashboardScreen extends GetView<DashboardController> {
                     children: [
                       _buildHeaderButton(Icons.person_outline, () {}),
                       const SizedBox(width: 12),
-                      _buildHeaderButton(Icons.settings_outlined, () {}),
+                      _buildHeaderButton(
+                        Icons.logout,
+                        () => _confirmarLogout(context),
+                      ),
                     ],
                   ),
                 ],
               ),
               const SizedBox(height: 32),
 
-              // Card de Próxima Sessão (Destaque)
               _buildMainCard(),
-
               const SizedBox(height: 24),
 
-              // Linha de Mini Cards (Sessões e Pagamentos)
               Row(
                 children: [
                   Expanded(
                     child: _buildMiniCard(
                       Icons.trending_up,
-                      "-",
-                      "Sessões hoje",
+                      '-',
+                      'Sessões hoje',
                       const Color(0xFFE3F2FD),
                       Colors.blue,
                     ),
@@ -72,8 +73,8 @@ class DashboardScreen extends GetView<DashboardController> {
                   Expanded(
                     child: _buildMiniCard(
                       Icons.attach_money,
-                      "-",
-                      "Pagamentos pendentes",
+                      '-',
+                      'Pagamentos pendentes',
                       const Color(0xFFFFF3E0),
                       Colors.orange,
                     ),
@@ -82,7 +83,6 @@ class DashboardScreen extends GetView<DashboardController> {
               ),
 
               const SizedBox(height: 32),
-
               const Text(
                 'Próximas sessões hoje',
                 style: TextStyle(
@@ -92,7 +92,6 @@ class DashboardScreen extends GetView<DashboardController> {
                 ),
               ),
               const SizedBox(height: 16),
-
               const Center(
                 child: Text(
                   'Nenhuma sessão disponível no momento.',
@@ -102,6 +101,29 @@ class DashboardScreen extends GetView<DashboardController> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _confirmarLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Sair'),
+        content: const Text('Deseja encerrar sua sessão?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              controller.logout();
+            },
+            child: const Text('Sair', style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }
@@ -133,50 +155,33 @@ class DashboardScreen extends GetView<DashboardController> {
           BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          const Text(
-            "PRÓXIMA SESSÃO",
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
+          Container(
+            width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+              color: AppColors.accent,
+              shape: BoxShape.circle,
             ),
+            child: const Icon(Icons.calendar_today, color: AppColors.primary),
           ),
-          const SizedBox(height: 16),
-          Row(
+          const SizedBox(width: 16),
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.calendar_today,
-                  color: AppColors.primary,
+              Text(
+                'Sem dados disponíveis',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "Sem dados disponíveis",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    "Aguardando informações do backend",
-                    style: TextStyle(color: AppColors.textSecondary),
-                  ),
-                ],
+              SizedBox(height: 4),
+              Text(
+                'Aguardando integração da agenda',
+                style: TextStyle(color: AppColors.textSecondary),
               ),
             ],
           ),
