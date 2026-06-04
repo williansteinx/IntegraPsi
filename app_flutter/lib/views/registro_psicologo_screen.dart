@@ -143,7 +143,7 @@ class RegistroPsicologoScreen extends StatelessWidget {
   }) {
     return Material(
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black,
       borderRadius: BorderRadius.circular(12),
       child: TextFormField(
         controller: controller,

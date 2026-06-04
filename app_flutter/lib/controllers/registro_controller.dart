@@ -51,7 +51,7 @@ class RegisterController extends GetxController {
         Get.snackbar(
           'Aviso',
           respostaServidor['mensagem'] ?? 'Erro ao realizar cadastro.',
-          backgroundColor: const Color(0xFFFFC107).withOpacity(0.9),
+          backgroundColor: const Color(0xFFFFC107),
           colorText: const Color(0xFF000000),
         );
       }
@@ -59,7 +59,7 @@ class RegisterController extends GetxController {
       Get.snackbar(
         'Erro de conexão',
         'Não foi possível conectar ao servidor do IntegraPsi.',
-        backgroundColor: const Color(0xFFF44336).withOpacity(0.9),
+        backgroundColor: const Color(0xFFF44336),
         colorText: const Color(0xFFFFFFFF),
       );
     } finally {
