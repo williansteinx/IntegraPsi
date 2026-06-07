@@ -22,4 +22,3 @@ O **IntegraPsi** unifica o fluxo administrativo e clínico da psicologia em um a
 * **Frontend:** Flutter (Dart) com gerenciamento de estado via GetX.
 * **Backend:** PHP (API RESTful integrada com Google Calendar API).
 * **Banco de Dados:** PostgreSQL (Persistência relacional).
->>>>>>> e478a677106e30d8fd220f26556e1e2cac0884d3
