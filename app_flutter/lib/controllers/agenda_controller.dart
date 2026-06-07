@@ -13,8 +13,11 @@ class AgendaController extends GetxController {
 
   void loadAppointments() async {
     isLoading.value = true;
+    // Carregar da API ou DB
     await Future.delayed(const Duration(seconds: 1));
-    appointments.value = [];
+    appointments.value = [
+      // Exemplo
+    ];
     isLoading.value = false;
   }
 }

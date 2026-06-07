@@ -7,23 +7,21 @@ class DashboardController extends GetxController {
 
   var appointments = <Appointment>[].obs;
   var isLoading = false.obs;
-  var nomePsicologo = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    _carregarUsuario();
+    loadAppointments();
   }
 
-  Future<void> _carregarUsuario() async {
-    final usuario = await _authService.getUsuarioLogado();
-    if (usuario != null) {
-      nomePsicologo.value = usuario.nmPsicologo;
-    }
+  void loadAppointments() async {
+    isLoading.value = true;
+    appointments.value = [];
+    isLoading.value = false;
   }
 
-  Future<void> logout() async {
-    await _authService.logout();
+  void logout() {
+    _authService.logout();
     Get.offAllNamed('/');
   }
 }

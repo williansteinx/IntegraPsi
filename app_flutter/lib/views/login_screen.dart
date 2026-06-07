@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../core/app_colors.dart';
+import '../core/main_navigator.dart';
 import '../controllers/login_controller.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -8,7 +9,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController controller = Get.find<LoginController>();
+    // Injetando o controller via GetX
+    final LoginController controller = Get.put(LoginController());
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -18,6 +20,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // LOGO
               Image.asset(
                 'assets/images/Logo_8_deploy.jpg',
                 height: 100,
@@ -48,12 +51,12 @@ class LoginScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       _buildToggleButton(
-                        'Psicólogo',
+                        "Psicólogo",
                         controller.isPsicologo.value,
                         () => controller.mudarPerfil(true),
                       ),
                       _buildToggleButton(
-                        'Paciente',
+                        "Paciente",
                         !controller.isPsicologo.value,
                         () => controller.mudarPerfil(false),
                       ),
@@ -64,11 +67,12 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
+              // TEXTO DINÂMICO BASEADO NO ESTADO
               Obx(
                 () => Text(
                   controller.isPsicologo.value
-                      ? 'Login do profissional'
-                      : 'Login do paciente',
+                      ? 'Login do Profissional'
+                      : 'Login do Paciente',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -79,52 +83,36 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              _buildTextField(
-                label: 'E-mail',
-                icon: Icons.email_outlined,
-                controller: controller.emailController,
-                keyboardType: TextInputType.emailAddress,
-              ),
+              _buildTextField(label: 'E-mail', icon: Icons.email_outlined),
               const SizedBox(height: 16),
+
               _buildTextField(
                 label: 'Senha',
                 icon: Icons.lock_outline,
-                controller: controller.passwordController,
                 isPassword: true,
               ),
 
               const SizedBox(height: 24),
 
-              Obx(
-                () => ElevatedButton(
-                  onPressed: controller.estaCarregando.value
-                      ? null
-                      : () => controller.entrar(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+              // BOTÃO ENTRAR
+              ElevatedButton(
+                onPressed: () => Get.offAll(() => const MainNavigation()),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: controller.estaCarregando.value
-                      ? const SizedBox(
-                          height: 22,
-                          width: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text('Entrar', style: TextStyle(fontSize: 18)),
                 ),
+                child: const Text('Entrar', style: TextStyle(fontSize: 18)),
               ),
 
               const SizedBox(height: 16),
 
-              Obx(
-                () => controller.isPsicologo.value
+              // LINKS DINÂMICOS: navegacão para cadastro/ativação conforme perfil
+              Obx(() {
+                return controller.isPsicologo.value
                     ? TextButton(
                         onPressed: () => Get.toNamed('/register'),
                         child: const Text(
@@ -138,8 +126,8 @@ class LoginScreen extends StatelessWidget {
                           'Ativar minha conta com código',
                           style: TextStyle(color: AppColors.primary),
                         ),
-                      ),
-              ),
+                      );
+              }),
 
               TextButton(
                 onPressed: () {},
@@ -155,6 +143,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  // WIDGET AUXILIAR PARA O BOTÃO DE ALTERNÂNCIA
   Widget _buildToggleButton(String label, bool isSelected, VoidCallback onTap) {
     return Expanded(
       child: GestureDetector(
@@ -178,20 +167,17 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  // WIDGET AUXILIAR PARA OS CAMPOS DE TEXTO
   Widget _buildTextField({
     required String label,
     required IconData icon,
-    required TextEditingController controller,
     bool isPassword = false,
-    TextInputType keyboardType = TextInputType.text,
   }) {
     return Material(
       elevation: 2,
       shadowColor: Colors.black.withOpacity(0.1),
       borderRadius: BorderRadius.circular(12),
       child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
         obscureText: isPassword,
         decoration: InputDecoration(
           labelText: label,
