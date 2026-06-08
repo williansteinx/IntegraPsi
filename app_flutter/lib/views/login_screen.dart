@@ -38,34 +38,44 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
 
-              Obx(() => Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(15),
+              Obx(
+                () => Text(
+                  controller.isPsicologo.value
+                      ? 'Login do profissional'
+                      : 'Login do paciente',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    _buildToggleButton('Psicólogo', controller.isPsicologo.value,
-                        () => controller.mudarPerfil(true)),
-                    _buildToggleButton('Paciente', !controller.isPsicologo.value,
-                        () => controller.mudarPerfil(false)),
-                  ],
-                ),
-              )),
+              ),
 
               const SizedBox(height: 32),
 
-              Obx(() => Text(
-                controller.isPsicologo.value
-                    ? 'Login do profissional'
-                    : 'Login do paciente',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textSecondary,
+              Obx(
+                () => Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Row(
+                    children: [
+                      _buildToggleButton(
+                        'Psicólogo',
+                        controller.isPsicologo.value,
+                        () => controller.mudarPerfil(true),
+                      ),
+                      _buildToggleButton(
+                        'Paciente',
+                        !controller.isPsicologo.value,
+                        () => controller.mudarPerfil(false),
+                      ),
+                    ],
+                  ),
                 ),
-              )),
+              ),
 
               const SizedBox(height: 24),
 
@@ -85,47 +95,51 @@ class LoginScreen extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              Obx(() => ElevatedButton(
-                onPressed: controller.estaCarregando.value
-                    ? null
-                    : () => controller.entrar(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 56),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              Obx(
+                () => ElevatedButton(
+                  onPressed: controller.estaCarregando.value
+                      ? null
+                      : () => controller.entrar(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
+                  child: controller.estaCarregando.value
+                      ? const SizedBox(
+                          height: 22,
+                          width: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text('Entrar', style: TextStyle(fontSize: 18)),
                 ),
-                child: controller.estaCarregando.value
-                    ? const SizedBox(
-                        height: 22,
-                        width: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Text('Entrar', style: TextStyle(fontSize: 18)),
-              )),
+              ),
 
               const SizedBox(height: 16),
 
-              Obx(() => controller.isPsicologo.value
-                  ? TextButton(
-                      onPressed: () => Get.toNamed('/register'),
-                      child: const Text(
-                        'Cadastrar como psicólogo',
-                        style: TextStyle(color: AppColors.primary),
+              Obx(
+                () => controller.isPsicologo.value
+                    ? TextButton(
+                        onPressed: () => Get.toNamed('/register'),
+                        child: const Text(
+                          'Cadastrar como psicólogo',
+                          style: TextStyle(color: AppColors.primary),
+                        ),
+                      )
+                    : TextButton(
+                        onPressed: () => Get.toNamed('/activate'),
+                        child: const Text(
+                          'Ativar minha conta com código',
+                          style: TextStyle(color: AppColors.primary),
+                        ),
                       ),
-                    )
-                  : TextButton(
-                      onPressed: () => Get.toNamed('/activate'),
-                      child: const Text(
-                        'Ativar minha conta com código',
-                        style: TextStyle(color: AppColors.primary),
-                      ),
-                    )),
+              ),
 
               TextButton(
                 onPressed: () {},
@@ -173,7 +187,7 @@ class LoginScreen extends StatelessWidget {
   }) {
     return Material(
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black,
       borderRadius: BorderRadius.circular(12),
       child: TextField(
         controller: controller,
