@@ -24,31 +24,58 @@ CREATE TABLE integrapsi.tb_psicologo (
 );
 
 
+CREATE SEQUENCE integrapsi.tb_ativacao_paciente_id_ativacao_seq;
+
 CREATE TABLE integrapsi.tb_ativacao_paciente (
-                id_ativacao INTEGER NOT NULL,
+                id_ativacao INTEGER NOT NULL DEFAULT nextval('integrapsi.tb_ativacao_paciente_id_ativacao_seq'),
                 id_psicologo INTEGER NOT NULL,
                 cd_token VARCHAR(10) NOT NULL,
                 ds_email VARCHAR(255) NOT NULL,
-                fl_utilizado BOOLEAN DEFAULT TRUE NOT NULL,
+                fl_utilizado BOOLEAN DEFAULT FALSE NOT NULL,
                 cd_expiracao TIMESTAMP NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 CONSTRAINT pk_ativacao PRIMARY KEY (id_ativacao)
 );
 
 
+ALTER SEQUENCE integrapsi.tb_ativacao_paciente_id_ativacao_seq OWNED BY integrapsi.tb_ativacao_paciente.id_ativacao;
+
 CREATE TABLE integrapsi.tb_paciente (
                 id_paciente INTEGER NOT NULL,
                 id_psicologo INTEGER NOT NULL,
                 nm_paciente VARCHAR NOT NULL,
                 cpf_paciente VARCHAR(11) NOT NULL,
+                telefone VARCHAR(20) NOT NULL,
+                dt_nascimento DATE NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 update_at TIMESTAMP NOT NULL,
                 CONSTRAINT pk_paciente PRIMARY KEY (id_paciente)
 );
 
 
+CREATE SEQUENCE integrapsi.tb_agendamento_id_consulta_seq;
+
+CREATE TABLE integrapsi.tb_agendamento (
+                id_consulta INTEGER NOT NULL DEFAULT nextval('integrapsi.tb_agendamento_id_consulta_seq'),
+                id_psicologo INTEGER NOT NULL,
+                id_paciente INTEGER NOT NULL,
+                dt_consulta TIMESTAMP NOT NULL,
+                link_meet VARCHAR(255),
+                id_google_event VARCHAR,
+                status VARCHAR(20) NOT NULL,
+                created_at TIMESTAMP NOT NULL,
+                update_at TIMESTAMP NOT NULL,
+                CONSTRAINT pk_agendamento PRIMARY KEY (id_consulta)
+);
+
+
+ALTER SEQUENCE integrapsi.tb_agendamento_id_consulta_seq OWNED BY integrapsi.tb_agendamento.id_consulta;
+
+CREATE SEQUENCE integrapsi.tb_evolucoes_id_evolucao_seq;
+
 CREATE TABLE integrapsi.tb_evolucoes (
-                id_evolucao INTEGER NOT NULL,
+                id_evolucao INTEGER NOT NULL DEFAULT nextval('integrapsi.tb_evolucoes_id_evolucao_seq'),
+                id_consulta INTEGER,
                 id_psicologo INTEGER NOT NULL,
                 id_paciente INTEGER NOT NULL,
                 ds_evolucao VARCHAR NOT NULL,
@@ -58,18 +85,23 @@ CREATE TABLE integrapsi.tb_evolucoes (
 );
 
 
-CREATE TABLE integrapsi.tb_agendamento (
+ALTER SEQUENCE integrapsi.tb_evolucoes_id_evolucao_seq OWNED BY integrapsi.tb_evolucoes.id_evolucao;
+
+CREATE SEQUENCE integrapsi.tb_financeiro_id_pagamento_seq;
+
+CREATE TABLE integrapsi.tb_financeiro (
+                id_pagamento INTEGER NOT NULL DEFAULT nextval('integrapsi.tb_financeiro_id_pagamento_seq'),
                 id_consulta INTEGER NOT NULL,
-                id_psicologo INTEGER NOT NULL,
-                id_paciente INTEGER NOT NULL,
-                dt_consulta TIMESTAMP NOT NULL,
-                link_meet VARCHAR(255) NOT NULL,
-                status VARCHAR(20) NOT NULL,
+                vl_sessao NUMERIC NOT NULL,
+                dt_pagamento DATE,
+                fl_pago BOOLEAN NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 update_at TIMESTAMP NOT NULL,
-                CONSTRAINT pk_agendamento PRIMARY KEY (id_consulta)
+                CONSTRAINT pk_financeiro PRIMARY KEY (id_pagamento)
 );
 
+
+ALTER SEQUENCE integrapsi.tb_financeiro_id_pagamento_seq OWNED BY integrapsi.tb_financeiro.id_pagamento;
 
 ALTER TABLE integrapsi.tb_psicologo ADD CONSTRAINT tb_usuario_tb_psicologo_fk
 FOREIGN KEY (id_psicologo)
@@ -81,13 +113,6 @@ NOT DEFERRABLE;
 ALTER TABLE integrapsi.tb_paciente ADD CONSTRAINT tb_usuario_tb_paciente_fk
 FOREIGN KEY (id_paciente)
 REFERENCES integrapsi.tb_usuario (id_usuario)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE integrapsi.tb_ativacao_paciente ADD CONSTRAINT tb_psicologo_ativacao_paciente_fk
-FOREIGN KEY (id_psicologo)
-REFERENCES integrapsi.tb_psicologo (id_psicologo)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -130,6 +155,20 @@ NOT DEFERRABLE;
 ALTER TABLE integrapsi.tb_evolucoes ADD CONSTRAINT tb_paciente_tb_evolucoes_fk
 FOREIGN KEY (id_paciente)
 REFERENCES integrapsi.tb_paciente (id_paciente)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE integrapsi.tb_financeiro ADD CONSTRAINT tb_agendamento_tb_financeiro_fk
+FOREIGN KEY (id_consulta)
+REFERENCES integrapsi.tb_agendamento (id_consulta)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE integrapsi.tb_evolucoes ADD CONSTRAINT tb_agendamento_tb_evolucoes_fk
+FOREIGN KEY (id_consulta)
+REFERENCES integrapsi.tb_agendamento (id_consulta)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
