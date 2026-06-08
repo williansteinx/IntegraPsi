@@ -20,4 +20,4 @@ O **IntegraPsi** unifica o fluxo administrativo e clínico da psicologia em um a
 ## 🚀 Tecnologias Utilizadas
 * **Frontend:** Flutter (Dart) com gerenciamento de estado via GetX.
 * **Backend:** PHP (API RESTful integrada com Google Calendar API).
-* **Banco de Dados:** PostgreSQL (Persistência relacional utilizando Class Table Inheritance).
+* **Banco de Dados:** PostgreSQL (Persistência relacional).
